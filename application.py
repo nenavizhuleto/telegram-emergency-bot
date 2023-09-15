@@ -18,12 +18,25 @@ class Actions:
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     log_conv(update, "Started conversation with Bot") 
+    user = None 
+    if not update.message:
+        user = update.callback_query.from_user
+    else:
+        user = update.message.from_user
+    
+    name = ""
+    if user:
+        name = f"{user.first_name} {user.last_name}, "
+
+        
+
     text = (
-        "Вы в главном меню.\n"
+        f"{name}рады приветствовать Вас! 👋\n"
+        "В Службе Экстренного Реагирования Первого Дата-центра 🏢\n"
         "Используйте кнопки ниже для навигации."
     )
     buttons = [
-        [InlineKeyboardButton(text="Экстренные действия", callback_data=str(Actions.EMERGENCY))],
+        [InlineKeyboardButton(text="🚨 Экстренные действия 🚨", callback_data=str(Actions.EMERGENCY))],
     ]
 
     keyboard = InlineKeyboardMarkup(buttons)
@@ -36,12 +49,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await update.callback_query.answer()
         await update.callback_query.edit_message_text(text=text, reply_markup=keyboard)
     else:
-        user = update.message.from_user
-        await update.message.reply_text(
-            f"{user.first_name} {user.last_name}, рады приветствовать Вас!\n"
-            "Добро пожаловать в Службу Экстренного Реагирования\n"
-            "от компании General Telecom\n"
-        )
         await update.message.reply_text(text=text, reply_markup=keyboard)
 
     context.user_data[Data.START_OVER] = False

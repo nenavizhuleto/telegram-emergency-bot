@@ -26,7 +26,7 @@ def main() -> None:
 
 
     emergency_conv = ConversationHandler(
-        entry_points=[CallbackQueryHandler(emergency.start, pattern=f"^{application.Actions.EMERGENCY}$|^{emergency.Actions.BACK}$")],
+        entry_points=[CallbackQueryHandler(emergency.start, pattern=f"^{application.Actions.EMERGENCY}$")],
         states={
             emergency.State.SELECTING_ACTION: [
                 CallbackQueryHandler(emergency.select_action, 
@@ -35,24 +35,29 @@ def main() -> None:
             emergency.State.CONFIRM_CODE: [MessageHandler(filters.TEXT & ~filters.COMMAND, emergency.confirmation_code)],
         },
         fallbacks=[
-            CommandHandler("stop", application.stop)
+            CallbackQueryHandler(emergency.end, pattern=f"^{emergency.Actions.MENU}$"),
+            CallbackQueryHandler(emergency.start, pattern=f"^{emergency.Actions.BACK}$")
         ],
         map_to_parent={
-            emergency.State.END: application.State.SELECTING_ACTION,
+            emergency.State.END: application.State.SELECTING_ACTION
         }
     )
 
     selection_handlers = [
         emergency_conv,
+        CallbackQueryHandler(emergency.end, pattern=f"^{emergency.Actions.MENU}$"),
     ]
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", application.start)],
         states={
-            application.State.MENU: [CallbackQueryHandler(application.start, pattern=f"^{application.State.END}$")],
+            application.State.MENU: [CallbackQueryHandler(application.start, pattern=f"^{application.State.END}$|^{emergency.Actions.MENU}$")],
             application.State.SELECTING_ACTION: selection_handlers,
         },
-        fallbacks=[CommandHandler("stop", application.stop)]
+        fallbacks=[
+            CommandHandler("stop", application.stop),
+            #CallbackQueryHandler(application.start, pattern=f"^{emergency.Actions.MENU}$")
+        ]
     )
 
     app.add_handler(conv_handler)
