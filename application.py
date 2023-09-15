@@ -19,11 +19,11 @@ class Actions:
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     log_conv(update, "Started conversation with Bot") 
     text = (
-        "You're in main menu now.\n"
-        "Use buttons to navigate over service"
+        "Вы в главном меню.\n"
+        "Используйте кнопки ниже для навигации."
     )
     buttons = [
-        [InlineKeyboardButton(text="Emergency actions", callback_data=str(Actions.EMERGENCY))],
+        [InlineKeyboardButton(text="Экстренные действия", callback_data=str(Actions.EMERGENCY))],
     ]
 
     keyboard = InlineKeyboardMarkup(buttons)
@@ -36,8 +36,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await update.callback_query.answer()
         await update.callback_query.edit_message_text(text=text, reply_markup=keyboard)
     else:
+        user = update.message.from_user
         await update.message.reply_text(
-            "Welcome to GT Emergency Telegram Bot"
+            f"{user.first_name} {user.last_name}, рады приветствовать Вас!\n"
+            "Добро пожаловать в Службу Экстренного Реагирования\n"
+            "от компании General Telecom\n"
         )
         await update.message.reply_text(text=text, reply_markup=keyboard)
 
@@ -47,5 +50,5 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
 async def stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     log_conv(update, "Stopped conversation with Bot") 
-    await update.message.reply_text("Okay, bye.")
+    await update.message.reply_text("Всего доброго.")
     return State.END

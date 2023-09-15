@@ -19,14 +19,14 @@ class Actions:
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     log_conv(update, "Entered emergency menu")
     buttons = [
-        [InlineKeyboardButton(text="Restrict remote access", callback_data=str(Actions.RESTRICT_REMOTE_ACCESS))],
-        [InlineKeyboardButton(text="Erase SSD", callback_data=str(Actions.ERASE_SSD))],
+        [InlineKeyboardButton(text="Отключить удаленный доступ", callback_data=str(Actions.RESTRICT_REMOTE_ACCESS))],
+        [InlineKeyboardButton(text="SSD: Удалить данные", callback_data=str(Actions.ERASE_SSD))],
         #[InlineKeyboardButton(text="Back", callback_data=str(ApplicationState.MENU))]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
 
 
-    text = "Please select action to perform"
+    text = "Какое действие необходимо выполнить?"
 
     if not context.user_data.get(Data.START_OVER):
         await update.callback_query.answer()
@@ -50,7 +50,7 @@ async def select_action(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
     log_conv(update, "Selecting emergency action")
     data = update.callback_query.data
     context.user_data[Data.CURRENT_EMERGENCY_ACTION] = data
-    text = "Please provide confirmation code"
+    text = "Введите код подтверждения следующим сообщением."
 
     await update.callback_query.answer()
     #await update.callback_query.edit_message_text(text=text)
@@ -62,7 +62,7 @@ async def perform_action(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     action = context.user_data[Data.CURRENT_EMERGENCY_ACTION]
 
     buttons = [
-        [InlineKeyboardButton(text="Back To Menu", callback_data=str(Actions.BACK))]
+        [InlineKeyboardButton(text="Назад к списку действий", callback_data=str(Actions.BACK))]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
 
@@ -70,22 +70,22 @@ async def perform_action(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     if action == Actions.RESTRICT_REMOTE_ACCESS:
         log_conv(update, "Selected to restrict remote access")
-        await update.message.reply_text("Restricting remote access. Please stand by.")
+        await update.message.reply_text("Отключаем удаленный доступ. Пожалуйста ожидайте...")
 
         # TODO: Perform mikrotik access and actually do action
 
         status = True
     elif action == Actions.ERASE_SSD:
         log_conv(update, "Selected to erase ssd")
-        await update.message.reply_text("Not implemented yet.")
+        await update.message.reply_text("Функция находится в разработке.")
 
 
     if status:
-        text = "Done."
+        text = "Успешно."
         log_conv(update, "Operation finished successfully")
         await update.message.reply_text(text=text, reply_markup=keyboard)
     else:
-        text = "Fail."
+        text = "Ошибка."
         log_conv(update, "Operation failed")
         await update.message.reply_text(text=text, reply_markup=keyboard)
 
@@ -96,10 +96,9 @@ async def confirmation_code(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     user_data = context.user_data
     code = update.message.text
     log_conv(update, f"Typed confirmation code: {code}")
-    success_text = "Success"
     failure_text = (
-        "Invalid confirmation code.\n"
-        "Type it again\nor use /stop to cancel"
+        "Код подтверждения неверный.\n"
+        "Введите снова\nили используйте команду /stop для отмены"
     )
     if code == "1234":
         log_conv(update, f"Confirmation successful")
