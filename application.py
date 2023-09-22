@@ -1,4 +1,5 @@
 from utils import AI
+from config import config
 from log import log_conv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, ConversationHandler
@@ -17,18 +18,23 @@ class Actions:
     CANCEL = AI.get()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+
     log_conv(update, "Started conversation with Bot") 
     user = None 
     if not update.message:
         user = update.callback_query.from_user
     else:
         user = update.message.from_user
-    
+
+    username = user.username
+    if username not in config.TELEGRAM_ALLOWED_USERS:
+        text = "Отказано в доступе"
+        await update.message.reply_text(text=text)
+        return State.END
+
     name = ""
     if user:
         name = f"{user.first_name} {user.last_name}, "
-
-        
 
     text = (
         f"{name}рады приветствовать Вас! 👋\n"
@@ -40,9 +46,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     ]
 
     keyboard = InlineKeyboardMarkup(buttons)
-
-    # TODO: Check if the user is allowed to access the bot 
-    # (ENV: TELEGRAM_ALLOWED_USERS)
 
     # If we are starting over we don't need to send new a message
     if context.user_data.get(Data.START_OVER):

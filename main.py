@@ -62,6 +62,7 @@ def main() -> None:
 
     app.add_handler(conv_handler)
 
+    print("Starting")
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 

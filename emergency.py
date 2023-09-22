@@ -1,4 +1,5 @@
 from utils import AI
+from config import config
 from log import logger, log_conv
 from application import Data 
 import application
@@ -106,7 +107,7 @@ async def confirmation_code(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         "🔐 Код подтверждения неверный.\n\n"
         "Введите снова\nили используйте кнопку ниже для возврата в меню"
     )
-    if code == "1234":
+    if code == config.CONFIRMATION_CODE:
         log_conv(update, f"Confirmation successful")
         #await update.message.reply_text(text=success_text)
         return await perform_action(update, context)
