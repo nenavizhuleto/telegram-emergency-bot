@@ -3,6 +3,7 @@ from config import config
 from log import logger, log_conv
 from application import Data 
 import application
+import mikrotik
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, ConversationHandler
 
@@ -76,6 +77,7 @@ async def perform_action(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         await update.message.reply_text("⏳ Отключаем удаленный доступ. Пожалуйста ожидайте...")
 
         # TODO: Perform mikrotik access and actually do action
+        mikrotik.RestrictAccess()
 
         status = True
     elif action == Actions.ERASE_SSD:

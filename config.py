@@ -17,10 +17,7 @@ class Config:
         self.MT_IP_ADDRESS = os.environ.get("MT_IP_ADDRESS")
         self.MT_USER = os.environ.get("MT_USER")
         self.MT_PASSWORD = os.environ.get("MT_PASSWORD")
-        self.RESTRICT_ADDRESSES = os.environ.get("RESTRICT_ADDRESSES").split(";") if os.environ.get("RESTRICT_ADDRESSES") else []
-        if isinstance(self.RESTRICT_ADDRESSES, str):
-            self.RESTRICT_ADDRESSES = [self.RESTRICT_ADDRESSES]
-
+        self.RESTRICT_ADDRESSES = os.environ.get("RESTRICT_ADDRESSES")
         self.CONFIRMATION_CODE = os.environ.get("CONFIRMATION_CODE")
 
 
