@@ -76,7 +76,6 @@ async def perform_action(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         log_conv(update, "Selected to restrict remote access")
         await update.message.reply_text("⏳ Отключаем удаленный доступ. Пожалуйста ожидайте...")
 
-        # TODO: Perform mikrotik access and actually do action
         mikrotik.RestrictAccess()
 
         status = True
@@ -111,7 +110,6 @@ async def confirmation_code(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     )
     if code == config.CONFIRMATION_CODE:
         log_conv(update, f"Confirmation successful")
-        #await update.message.reply_text(text=success_text)
         return await perform_action(update, context)
     else:
         log_conv(update, f"Confirmation failed")
