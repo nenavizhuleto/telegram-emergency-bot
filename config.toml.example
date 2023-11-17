@@ -1,0 +1,20 @@
+[telegram]
+users = ["user1", "user2"]
+token = "TOKEN"
+
+[security]
+password = "SECRET"
+
+[routers]
+[routers.r1]
+address = "IP:PORT"
+user = "admin"
+password = "admin"
+command = { mode = "script", name = "test" }
+
+[routers.r2]
+address = "IP:PORT"
+user = "admin"
+password = "admin"
+command = { mode = "ip", addresses = ["1.1.1.1/1", "2.2.2.2/2"]}
+
