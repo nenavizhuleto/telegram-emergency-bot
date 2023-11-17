@@ -6,3 +6,5 @@ venv
 .gitignore
 README.md
 **/target
+config.toml
+config.toml.example
