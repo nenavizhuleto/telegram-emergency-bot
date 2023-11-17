@@ -1,9 +1,11 @@
-version: "3"
+version: "3.7"
 
 services:
   button:
     container_name: button
     image: nenavizhuleto/emergency-button:latest
     volumes:
-      - ${PWD}/config.toml:/app/config.toml
+      - type: bind
+        source: ./config.toml
+        target: /app/config.toml
     restart: unless-stopped
