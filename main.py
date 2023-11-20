@@ -56,7 +56,6 @@ def main() -> None:
         },
         fallbacks=[
             CommandHandler("stop", application.stop),
-            #CallbackQueryHandler(application.start, pattern=f"^{emergency.Actions.MENU}$")
         ]
     )
 

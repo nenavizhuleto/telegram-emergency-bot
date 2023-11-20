@@ -24,7 +24,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     log_conv(update, "Entered emergency menu")
     buttons = [
         [InlineKeyboardButton(text="📡 Отключить удаленный доступ", callback_data=str(Actions.RESTRICT_REMOTE_ACCESS))],
-        [InlineKeyboardButton(text="💿 SSD: Удалить данные", callback_data=str(Actions.ERASE_SSD))],
+#        [InlineKeyboardButton(text="💿 SSD: Удалить данные", callback_data=str(Actions.ERASE_SSD))],
         [InlineKeyboardButton(text="⬅️  В главное меню", callback_data=str(Actions.MENU))]
     ]
     keyboard = InlineKeyboardMarkup(buttons)
