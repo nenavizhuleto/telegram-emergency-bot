@@ -56,6 +56,7 @@ def main() -> None:
         },
         fallbacks=[
             CommandHandler("stop", application.stop),
+            CommandHandler("start", application.start),
         ]
     )
 
